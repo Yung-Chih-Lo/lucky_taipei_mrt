@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(openspec new:*)",
+      "Bash(openspec status:*)",
+      "Bash(openspec instructions proposal:*)",
+      "Bash(openspec instructions design:*)",
+      "Bash(openspec instructions specs:*)",
+      "Bash(openspec instructions tasks:*)",
+      "Bash(openspec instructions apply:*)",
+      "Bash(chmod:*)",
+      "Bash(openspec list:*)",
+      "Bash(python3:*)",
+      "mcp__insforge__fetch-docs",
+      "Bash(curl:*)",
+      "Bash(test:*)",
+      "WebFetch(domain:docs.vast.ai)",
+      "mcp__vastai-docs__SearchVastAiDocumentation",
+      "Bash(npx skills find:*)",
+      "Bash(npx skills add:*)",
+      "WebFetch(domain:docs.cvat.ai)",
+      "WebFetch(domain:app.cvat.ai)",
+      "WebSearch",
+      "Bash(tail:*)",
+      "Bash(grep:*)",
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(python:*)",
+      "Bash(npm run:*)",
+      "Bash(pip install:*)",
+      "Bash(mkdir:*)",
+      "WebFetch(domain:www.cvat.ai)",
+      "WebFetch(domain:nuclio.io)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:science.china-vo.org)",
+      "WebFetch(domain:opencv.github.io)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  }
+}
