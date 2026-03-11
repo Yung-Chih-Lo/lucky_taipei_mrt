@@ -1,4 +1,5 @@
 // src/components/Sidebar.jsx (MRT Only, Single Column Layout)
+'use client';
 
 import React from 'react';
 import { Checkbox, Button, Divider, Typography } from 'antd';

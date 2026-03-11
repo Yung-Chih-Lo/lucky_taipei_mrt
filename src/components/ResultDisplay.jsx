@@ -1,4 +1,5 @@
 // src/components/ResultDisplay.jsx (MRT Version - Final)
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Typography, Empty } from 'antd';

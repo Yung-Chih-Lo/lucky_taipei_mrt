@@ -1,4 +1,5 @@
 // src/components/MetroMap.jsx (重構成 Functional Component)
+'use client';
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -29,9 +30,6 @@ function MetroMap({
     onMouseEnterStation = () => {},
     onMouseLeaveStation = () => {},
     onClickStation = () => {},
-    // --- userData 相關 (如果需要) ---
-    showUserData = false,
-    renderUserData = () => null,
 }) {
 
     const svgStyle = {
@@ -102,24 +100,22 @@ function MetroMap({
         }
 
 
-        // 傳遞給 MetroStation 的 props
-        const stationProps = {
-            key: `station-${station.id ?? i}`,
-            cx: station.center?.x ?? 0,
-            cy: station.center?.y ?? 0,
-            r: baseRadius,
-            strokeWidth: baseStationStrokeWidth,
-            fill: bgColor,
-            lineColors: displayLineColors, // 傳遞計算後的顏色
-            opacity: opacity,           // *** 傳遞透明度 ***
-            // 傳遞原始 station data 給事件處理器
-            originalStation: station,
-            onMouseEnterStation: onMouseEnterStation,
-            onMouseLeaveStation: onMouseLeaveStation,
-            onClickStation: onClickStation,
-        };
-
-        return <MetroStation {...stationProps} />;
+        return (
+            <MetroStation
+                key={`station-${station.id ?? i}`}
+                cx={station.center?.x ?? 0}
+                cy={station.center?.y ?? 0}
+                r={baseRadius}
+                strokeWidth={baseStationStrokeWidth}
+                fill={bgColor}
+                lineColors={displayLineColors}
+                opacity={opacity}
+                originalStation={station}
+                onMouseEnterStation={onMouseEnterStation}
+                onMouseLeaveStation={onMouseLeaveStation}
+                onClickStation={onClickStation}
+            />
+        );
     });
 
     // --- 渲染 Station Names ---
@@ -136,22 +132,17 @@ function MetroMap({
                     x={station.name?.pos?.x ?? 0}
                     y={station.name?.pos?.y ?? 0}
                     fontSize={baseFontSize}
-                    style={textStyle} // 應用基礎文字樣式
-                    fillOpacity={opacity} // *** 應用透明度 ***
+                    style={{ ...textStyle, transition: 'fill-opacity 0.3s ease' }}
+                    fillOpacity={opacity}
                     dominantBaseline="middle"
                     textAnchor={station.name?.pos?.anchor || 'start'}
-                    pointerEvents="none" // 避免文字阻擋滑鼠事件
-                    sx={{ transition: 'fill-opacity 0.3s ease' }} // 添加過渡效果
+                    pointerEvents="none"
                 >
                     {station.name?.zh || ''}
                 </text>
             );
         });
     }
-
-    // --- UserData (如果需要，也要加上類似的透明度邏輯) ---
-    let userData = null;
-    // ...
 
     // --- 返回 SVG ---
     return (
@@ -171,7 +162,6 @@ function MetroMap({
             <g>{stations.filter(s => s.props.opacity === 1)}</g>
             {/* 最後畫文字 */}
             <g>{stationNames}</g>
-            {/* {userData} */}
         </svg>
     );
 }
@@ -186,8 +176,6 @@ MetroMap.propTypes = {
     onMouseEnterStation: PropTypes.func,
     onMouseLeaveStation: PropTypes.func,
     onClickStation: PropTypes.func,
-    showUserData: PropTypes.bool,
-    renderUserData: PropTypes.oneOfType([PropTypes.func, PropTypes.arrayOf(PropTypes.func)]),
 };
 
 export default MetroMap;

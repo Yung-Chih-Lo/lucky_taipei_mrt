@@ -1,4 +1,5 @@
 // src/components/MetroStation.jsx (重構成 Functional Component)
+'use client';
 
 import React from 'react';
 import PropTypes from 'prop-types';

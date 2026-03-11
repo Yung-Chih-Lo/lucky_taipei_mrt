@@ -1,16 +1,17 @@
-// src/App.jsx (MRT Version)
+'use client';
 
-import React, { useState, useRef } from 'react'; 
+import React, { useState } from 'react';
 import { Typography, Modal } from 'antd';
 import styled from 'styled-components';
-import Sidebar from './components/Sidebar'; 
-import MetroMap from './components/MetroMap.jsx'; 
-import ResultDisplay from './components/ResultDisplay'; 
-import { getRandomMetroStation } from './utils/metroUtils'; 
-import metroData from './data/metroData.json'; 
-import { metroLineInfo, allMetroLineCodes } from './constants/metroInfo';
+import Sidebar from '../src/components/Sidebar';
+import MetroMap from '../src/components/MetroMap';
+import ResultDisplay from '../src/components/ResultDisplay';
+import { getRandomMetroStation } from '../src/utils/metroUtils';
+import metroData from '../src/data/metroData.json';
+import { metroLineInfo, allMetroLineCodes } from '../src/constants/metroInfo';
 
 const { Title } = Typography;
+
 const AppContainer = styled.div`
   display: flex;
   min-height: 100vh;
@@ -28,8 +29,11 @@ const SidebarArea = styled.div`
   flex-direction: column;
   width: 280px;
   @media (max-width: 768px) {
-    width: 100%; height: auto; box-shadow: none;
-    border-bottom: 1px solid #d9d9d9; order: 2;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    border-bottom: 1px solid #d9d9d9;
+    order: 2;
   }
 `;
 
@@ -41,15 +45,15 @@ const MainArea = styled.div`
   flex-direction: column;
   align-items: center;
   @media (max-width: 768px) {
-    padding: 16px; order: 1;
+    padding: 16px;
+    order: 1;
   }
 `;
 
-// 可以直接命名為 MapContainer 或保留 MetroMapContainer
 const MetroMapContainer = styled.div`
   width: 100%;
   min-height: 300px;
-  max-height: 80vh; // 限制容器高度
+  max-height: 80vh;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -65,38 +69,33 @@ const MetroMapContainer = styled.div`
   }
 `;
 
-// --- Modal 標題 (只保留 Metro) ---
-const modalTitles = [ // 直接使用 modalTitles
-  '下一班列車開往...', '捷運隨機 GO！', '今天的幸運捷運站？',
+const modalTitles = [
+  '下一班列車開往...',
+  '捷運隨機 GO！',
+  '今天的幸運捷運站？',
   '探索城市節點...',
 ];
 
-
-
-function App() {
-
+export default function Home() {
   const [selectedLines, setSelectedLines] = useState([]);
-  const [randomMetroStation, setRandomMetroStation] = useState(null); 
+  const [randomMetroStation, setRandomMetroStation] = useState(null);
   const [isResultModalVisible, setIsResultModalVisible] = useState(false);
   const [titleIndex, setTitleIndex] = useState(0);
 
-
   const handleLineSelectionChange = (selectedLineCodes) => {
     setSelectedLines(selectedLineCodes);
-    setRandomMetroStation(null); 
+    setRandomMetroStation(null);
     setIsResultModalVisible(false);
   };
 
-
   const handleRandomPick = () => {
     const stationResult = getRandomMetroStation(metroData, selectedLines);
-
     if (stationResult) {
       setRandomMetroStation(stationResult);
       setTitleIndex(prevIndex => (prevIndex + 1) % modalTitles.length);
       setIsResultModalVisible(true);
     } else {
-      console.warn(`無法從選擇的線路抽取到車站!`);
+      console.warn('無法從選擇的線路抽取到車站!');
     }
   };
 
@@ -104,10 +103,7 @@ function App() {
     setIsResultModalVisible(false);
   };
 
-  // --- 計算狀態 ---
   const isPickButtonDisabled = selectedLines.length === 0;
-  const currentResult = randomMetroStation;
-  const currentAllStationsData = metroData;
   const resultModalTitle = modalTitles[titleIndex];
 
   return (
@@ -117,7 +113,7 @@ function App() {
           selectedLines={selectedLines}
           onLineChange={handleLineSelectionChange}
           metroLineCodes={allMetroLineCodes}
-          metroLineInfo={metroLineInfo} 
+          metroLineInfo={metroLineInfo}
           onRandomPick={handleRandomPick}
           isPickButtonDisabled={isPickButtonDisabled}
         />
@@ -128,12 +124,11 @@ function App() {
           台北捷運路網圖
         </Title>
         <MetroMapContainer>
-           <MetroMap
-             bgColor="#f0f2f5"
-             selectedLines={selectedLines}
-           />
+          <MetroMap
+            bgColor="#f0f2f5"
+            selectedLines={selectedLines}
+          />
         </MetroMapContainer>
-
       </MainArea>
 
       <Modal
@@ -143,16 +138,13 @@ function App() {
         footer={null}
         centered
       >
-        {isResultModalVisible && currentResult && (
+        {isResultModalVisible && randomMetroStation && (
           <ResultDisplay
-            result={currentResult}
-            resultType='metro'    
-            allStationsData={currentAllStationsData} 
+            result={randomMetroStation}
+            allStationsData={metroData}
           />
         )}
       </Modal>
     </AppContainer>
   );
 }
-
-export default App;
