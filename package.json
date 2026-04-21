@@ -4,32 +4,51 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "dev:vite": "vite",
+    "build:vite": "vite build",
+    "preview": "vite preview",
+    "migrate": "drizzle-kit migrate",
+    "seed": "tsx scripts/seed.ts",
+    "test:seed": "DATABASE_PATH=./data/test-seed.db tsx scripts/test-seed-idempotency.ts",
+    "hash-password": "tsx scripts/hash-password.ts"
   },
   "dependencies": {
+    "@ant-design/nextjs-registry": "^1.0.2",
+    "@node-rs/argon2": "^2.0.0",
     "antd": "^5.24.8",
+    "better-sqlite3": "^11.3.0",
+    "drizzle-kit": "^0.28.0",
+    "drizzle-orm": "^0.36.0",
+    "iron-session": "^8.0.3",
     "leaflet": "^1.9.4",
+    "next": "^15.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.28.0",
-    "styled-components": "^6.1.17"
+    "styled-components": "^6.1.17",
+    "tsx": "^4.19.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@types/better-sqlite3": "^7.6.11",
     "@types/leaflet": "^1.9.14",
+    "@types/node": "^20.16.0",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "eslint": "^9.22.0",
+    "eslint-config-next": "^15.0.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "typescript": "^5.5.0",
     "vite": "^6.3.1"
-  },
-  "homepage": "./"
+  }
 }

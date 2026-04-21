@@ -1,0 +1,47 @@
+# VCS / local dirs
+.git
+.gitignore
+.github
+
+# Dev artifacts
+node_modules
+.next
+dist
+dist-ssr
+
+# Local SQLite (must come from the mounted volume, not the image)
+data
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Editor / OS cruft
+.vscode
+.idea
+.DS_Store
+*.sw?
+
+# Legacy Vite stack (not needed at runtime — will be deleted in Phase 7).
+# NOTE: src/middleware.ts is the active Next.js middleware file and must
+# survive the copy (Next 15 treats src/ as the source root when present).
+src/*
+!src/middleware.ts
+index.html
+vite.config.js
+eslint.config.js
+public/_redirects
+
+# OpenSpec docs — not needed at runtime
+openspec
+
+# Tests and scratch files
+/tmp
+
+# Logs
+*.log
