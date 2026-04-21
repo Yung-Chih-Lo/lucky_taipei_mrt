@@ -62,10 +62,10 @@
 ## 6. Deployment (Zeabur volume)
 
 - [x] 6.1 Docker-based deploy instead of zbpack/Node builder. Removed `zbpack.json`. Added multi-stage `Dockerfile` (deps → builder → runner on `node:20-slim`), `docker-entrypoint.sh` (mkdir volume dir → migrate → idempotent seed → `next start`), and `.dockerignore` (excludes legacy `src/*` but keeps `src/middleware.ts` because Next 15 still treats src/ as source root when it exists). Also set `pageExtensions: ['tsx', 'ts']` in `next.config.mjs`. Seed JSON moved to `scripts/seed-data/metroData.json` so it survives Phase 7's deletion of `src/`. Moved `drizzle-kit` + `tsx` to `dependencies` so the entrypoint can run them from the pruned production `node_modules`.
-- [ ] 6.2 Attach Zeabur persistent volume, mount at `/data` (**USER ACTION**)
-- [ ] 6.3 Set Zeabur env vars: `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH` (from `npm run hash-password`), `SESSION_SECRET` (≥32 chars). `DATABASE_PATH` and `NODE_ENV` are defaulted in the Dockerfile (`/data/metro.db` / `production`) but can be overridden. `PORT` set by Zeabur automatically. (**USER ACTION**)
-- [ ] 6.4 `git push` → Zeabur auto-detects `Dockerfile` → builds → starts container. Entrypoint runs migrate + seed automatically on every boot; both are idempotent so the mounted volume's existing data is preserved across rebuilds. (**USER ACTION — just push**)
-- [ ] 6.5 Verify production: `/` renders from DB, `/admin` redirects to login when logged out, login + drag + logout work, public visitor sees admin's change without redeploy (**USER VERIFY**)
+- [x] 6.2 Zeabur persistent volume attached at `/data` (user).
+- [x] 6.3 Zeabur env vars set: `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET` (user).
+- [x] 6.4 Pushed to main — Zeabur auto-built the Dockerfile, container booted, entrypoint ran `migrate` + idempotent `seed`, Next.js serving on Zeabur's assigned port.
+- [x] 6.5 Production verified by user: public `/` renders from the DB and admin flow works end-to-end.
 - [x] 6.6 Native modules verified locally via `npm run build`: 8 routes generated, middleware 37.3 KB, `better-sqlite3` + `@node-rs/argon2` compile cleanly. Dockerfile's `deps` stage installs `python3 make g++` so the same compilation works inside the container for platforms where prebuilt binaries aren't shipped.
 
 ## 7. Remove the old Vite stack (only after Phase 6 is green)
