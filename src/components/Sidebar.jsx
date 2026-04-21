@@ -4,7 +4,7 @@ import { SwapOutlined } from '@ant-design/icons'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-const { Text, Title } = Typography
+const { Title } = Typography
 
 const SidebarWrapper = styled.div`
   padding: 16px;
@@ -15,12 +15,6 @@ const SidebarWrapper = styled.div`
 const TitleContainer = styled.div`
   text-align: center;
   margin-bottom: 24px;
-`
-const SubtitleText = styled(Text)`
-  display: block;
-  margin-top: 4px;
-  color: rgba(0, 0, 0, 0.55);
-  font-size: 0.9em;
 `
 const ButtonGroup = styled.div`
   margin-bottom: 16px;
@@ -61,12 +55,12 @@ function Sidebar({
     <SidebarWrapper>
       <TitleContainer>
         <Title level={4} style={{ margin: 0, color: '#1890ff' }}>隨機捷運 GO！ 🚇</Title>
-        <SubtitleText>選擇線路，尋找你的下一站</SubtitleText>
+        <p style={{ marginTop: 4, marginBottom: 0, color: 'rgba(0,0,0,0.45)', fontSize: '0.9em' }}>
+          選擇線路，尋找你的下一站
+        </p>
       </TitleContainer>
 
-      <Text strong style={{ display: 'block', textAlign: 'center', marginBottom: 12 }}>
-        選擇想搭的線路：
-      </Text>
+      <p style={{ textAlign: 'center', fontWeight: 600, marginBottom: 12 }}>選擇想搭的線路：</p>
       <ButtonGroup>
         <Button type="link" size="small" onClick={handleSelectAll} disabled={selectedLines.length === metroLineCodes.length}>全選</Button>
         <Button type="link" size="small" onClick={handleDeselectAll} disabled={selectedLines.length === 0}>全部取消</Button>

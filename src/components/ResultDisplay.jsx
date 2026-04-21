@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { metroLineInfo } from '../constants/metroInfo.js'
 
-const { Title, Text } = Typography
+const { Title } = Typography
 
 const ResultContainer = styled.div`
   text-align: center;
@@ -65,7 +65,7 @@ function ResultDisplay({ result }) {
           <CarOutlined style={{ marginRight: 8 }} />
           「{stationName}」站
         </Title>
-        {lineSubtitle && <Text type="secondary">{lineSubtitle}</Text>}
+        {lineSubtitle && <p style={{ color: 'rgba(0,0,0,0.45)', margin: 0 }}>{lineSubtitle}</p>}
       </div>
       <LinksContainer>
         <StyledLink href={wikiLink} target="_blank" rel="noopener noreferrer">
