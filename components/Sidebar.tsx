@@ -86,7 +86,7 @@ export default function Sidebar({
         loading={isAnimating}
         icon={<SwapOutlined />}
       >
-        {isAnimating ? '列車行駛中…' : '抽．下．一．站'}
+        {isAnimating ? '列車行駛中…' : '命．中．注．站'}
       </Button>
     </div>
   )

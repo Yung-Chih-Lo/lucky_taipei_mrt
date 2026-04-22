@@ -102,8 +102,8 @@ export default function MrtPicker({ stations, connections, lines, canvas }: Prop
   return (
     <div className="omikuji-card" style={cardStyle}>
       <div style={cardCaptionStyle}>
-        <span>選擇路線 · 搖．下．一．站</span>
-        <span>都市籤詩 · 下一站幸運車站</span>
+        <span>坐火行 · 命中注站</span>
+        <span>坐到哪算哪</span>
       </div>
 
       <div className="picker-split">

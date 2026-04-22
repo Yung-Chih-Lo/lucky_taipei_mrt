@@ -31,8 +31,7 @@ export default function TopBar() {
   return (
     <header style={barStyle}>
       <Link href="/" style={wordmarkLinkStyle} aria-label="回到首頁">
-        <span style={wordmarkPrimaryStyle}>下一站</span>
-        <span style={wordmarkCaptionStyle}>幸運車站</span>
+        <span style={wordmarkPrimaryStyle}>坐火行</span>
       </Link>
 
       <nav style={tabsStyle} aria-label="選擇運輸類型">

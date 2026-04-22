@@ -57,8 +57,9 @@ export async function GET(
     loadFont('JetBrainsMono-500.ttf'),
   ])
 
-  const origin = new URL(req.url).origin
-  const qrTarget = `${origin}/ticket/${encodeURIComponent(pick.token)}`
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || new URL(req.url).origin
+  const qrTarget = `${baseUrl}/ticket/${encodeURIComponent(pick.token)}`
   const qrSvg = await QRCode.toString(qrTarget, {
     type: 'svg',
     margin: 1,
@@ -69,212 +70,195 @@ export async function GET(
   const ticketNo = ticketNoFromToken(pick.token)
   const dateLabel = formatDate(pick.picked_at)
   const modeLabel = pick.transport_type === 'mrt' ? '捷運' : '台鐵'
-  const accent = pick.transport_type === 'mrt' ? '#E8421C' : '#15365C'
+
+  const nameLen = pick.name_zh.length
+  const nameFontSize = nameLen <= 2 ? 160 : nameLen <= 4 ? 120 : 88
 
   return new ImageResponse(
     (
       <div
         style={{
           width: 1080,
-          height: 1920,
-          background: '#F3ECDC',
+          height: 607,
+          background: '#FFFBF0',
           display: 'flex',
-          padding: 72,
+          flexDirection: 'column',
+          padding: '44px 64px',
           fontFamily: 'NotoSansTC, sans-serif',
         }}
       >
+        {/* Header */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingBottom: 18,
+            borderBottom: '2px dashed rgba(26,29,43,0.22)',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: 'NotoSerifTC, serif',
+              fontSize: 30,
+              fontWeight: 900,
+              letterSpacing: 8,
+              color: '#1A1D2B',
+              display: 'flex',
+            }}
+          >
+            坐火行
+          </span>
+          <span
+            style={{
+              fontFamily: 'JetBrainsMono, monospace',
+              fontSize: 18,
+              color: '#6B6557',
+              letterSpacing: 4,
+              display: 'flex',
+            }}
+          >
+            No.{ticketNo}
+          </span>
+        </div>
+
+        {/* Center */}
         <div
           style={{
             flex: 1,
             display: 'flex',
-            flexDirection: 'column',
-            background: '#FFFBF0',
-            border: '1px solid rgba(26,29,43,0.28)',
-            borderRadius: 40,
-            padding: 80,
-            position: 'relative',
-            boxShadow: '10px 10px 0 0 rgba(232,66,28,0.12), -10px -10px 0 0 rgba(26,29,43,0.08)',
+            alignItems: 'center',
+            gap: 48,
+            paddingTop: 28,
           }}
         >
-          {/* top kerf */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 32,
-              left: 56,
-              right: 56,
-              height: 2,
-              borderTop: '2px dashed rgba(26,29,43,0.28)',
-              display: 'flex',
-            }}
-          />
-          {/* bottom kerf */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 32,
-              left: 56,
-              right: 56,
-              height: 2,
-              borderTop: '2px dashed rgba(26,29,43,0.28)',
-              display: 'flex',
-            }}
-          />
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              color: '#6B6557',
-              fontSize: 24,
-              letterSpacing: 6,
-              textTransform: 'uppercase',
-            }}
-          >
-            <span>都市籤詩 · 下一站幸運車站</span>
-            <span style={{ fontFamily: 'JetBrainsMono, monospace' }}>No.{ticketNo}</span>
-          </div>
-
+          {/* Left: station info */}
           <div
             style={{
               flex: 1,
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              textAlign: 'center',
-              marginTop: 40,
+              gap: 0,
             }}
           >
-            <div
+            <span
               style={{
-                color: '#6B6557',
-                fontSize: 28,
+                fontSize: 20,
                 letterSpacing: 10,
+                color: '#6B6557',
                 textTransform: 'uppercase',
-                marginBottom: 24,
+                display: 'flex',
               }}
             >
-              今 日 的 籤
-            </div>
-            {pick.name_en && (
-              <div
-                style={{
-                  color: '#6B6557',
-                  fontSize: 30,
-                  letterSpacing: 6,
-                  marginBottom: 18,
-                }}
-              >
-                {pick.name_en.toUpperCase()}
-              </div>
-            )}
-            <div
+              此 站 有 緣
+            </span>
+            <span
               style={{
                 fontFamily: 'NotoSerifTC, serif',
-                fontSize: 240,
+                fontSize: nameFontSize,
                 fontWeight: 900,
                 color: '#1A1D2B',
-                lineHeight: 1,
-                letterSpacing: 8,
+                lineHeight: 1.05,
+                letterSpacing: 6,
                 display: 'flex',
+                marginTop: 12,
               }}
             >
               {pick.name_zh}
-            </div>
-            <div
+            </span>
+            {pick.name_en && (
+              <span
+                style={{
+                  fontSize: 22,
+                  color: '#6B6557',
+                  letterSpacing: 6,
+                  display: 'flex',
+                  marginTop: 10,
+                }}
+              >
+                {pick.name_en.toUpperCase()}
+              </span>
+            )}
+            <span
               style={{
-                marginTop: 18,
+                fontSize: 20,
                 color: '#1A1D2B',
-                fontSize: 34,
-                letterSpacing: 10,
+                letterSpacing: 6,
+                marginTop: 14,
                 display: 'flex',
               }}
             >
-              {pick.transport_type === 'tra' ? `${pick.county ?? ''} · 台鐵` : '台北捷運'}
-            </div>
+              {pick.transport_type === 'tra'
+                ? `${pick.county ?? ''} · 台鐵`
+                : '台北捷運'}{' '}
+              · {dateLabel}
+            </span>
           </div>
 
+          {/* Right: QR + stamp */}
           <div
             style={{
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              marginTop: 40,
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 20,
+              flexShrink: 0,
             }}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={qrDataUri} width={170} height={170} alt="" />
             <div
               style={{
+                width: 96,
+                height: 96,
+                borderRadius: 999,
+                border: '4px solid #C8954A',
+                color: '#C8954A',
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
-                gap: 24,
+                justifyContent: 'center',
+                transform: 'rotate(-8deg)',
+                fontFamily: 'NotoSerifTC, serif',
               }}
             >
-              <div
+              <span
                 style={{
-                  width: 160,
-                  height: 160,
-                  borderRadius: 999,
-                  border: `6px solid #C8954A`,
-                  boxShadow: 'inset 0 0 0 3px #C8954A',
-                  color: '#C8954A',
+                  fontSize: 34,
+                  fontWeight: 900,
+                  letterSpacing: 2,
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transform: 'rotate(-8deg)',
-                  fontFamily: 'NotoSerifTC, serif',
                 }}
               >
-                <span style={{ fontSize: 56, fontWeight: 900, letterSpacing: 4 }}>{modeLabel}</span>
-                <span style={{ fontSize: 20, letterSpacing: 4, marginTop: 4, fontFamily: 'JetBrainsMono, monospace' }}>
-                  No.{ticketNo}
-                </span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 6,
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: 'NotoSerifTC, serif',
-                    fontSize: 36,
-                    color: '#1A1D2B',
-                    letterSpacing: 6,
-                  }}
-                >
-                  {dateLabel}
-                </span>
-                <span
-                  style={{
-                    fontSize: 20,
-                    color: accent,
-                    letterSpacing: 8,
-                  }}
-                >
-                  搖一搖 · 讓城市替你決定今天
-                </span>
-              </div>
+                {modeLabel}
+              </span>
             </div>
-
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={qrDataUri}
-              width={180}
-              height={180}
-              alt=""
-            />
           </div>
+        </div>
+
+        {/* Footer */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: 18,
+            borderTop: '2px dashed rgba(26,29,43,0.22)',
+            marginTop: 24,
+            fontSize: 15,
+            letterSpacing: 6,
+            color: '#6B6557',
+            textTransform: 'uppercase',
+          }}
+        >
+          <span style={{ display: 'flex' }}>命中注站 · 坐到哪算哪</span>
+          <span style={{ display: 'flex' }}>ZUOHUO XING</span>
         </div>
       </div>
     ),
     {
       width: 1080,
-      height: 1920,
+      height: 607,
       fonts: [
         { name: 'NotoSerifTC', data: serif, weight: 900, style: 'normal' },
         { name: 'NotoSansTC', data: sans, weight: 500, style: 'normal' },

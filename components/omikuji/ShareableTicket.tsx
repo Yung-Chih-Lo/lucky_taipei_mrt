@@ -25,14 +25,14 @@ export default function ShareableTicket({ token, stationNameZh }: Props) {
         const res = await fetch(pngUrl)
         if (res.ok) {
           const blob = await res.blob()
-          const file = new File([blob], `${stationNameZh}-下一站幸運車站.png`, {
+          const file = new File([blob], `${stationNameZh}-坐火行.png`, {
             type: 'image/png',
           })
           if (navigator.canShare({ files: [file] })) {
             await navigator.share({
               files: [file],
-              title: `${stationNameZh} · 下一站幸運車站`,
-              text: `搖一搖，讓城市替你決定今天。我今天抽到「${stationNameZh}」。`,
+              title: `${stationNameZh} · 坐火行 · 此站有緣`,
+              text: `我把今天的決定權交給了捷運。它叫我去「${stationNameZh}」，我就去了。你敢嗎？`,
             })
             return
           }
@@ -60,7 +60,7 @@ export default function ShareableTicket({ token, stationNameZh }: Props) {
       loading={isSharing}
       onClick={handleShare}
     >
-      分享這張籤
+      曬出我的籤
     </Button>
   )
 }

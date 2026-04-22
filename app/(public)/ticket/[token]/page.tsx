@@ -48,13 +48,13 @@ export default function TicketPage({ params }: { params: { token: string } }) {
 
   return (
     <div style={pageStyle}>
-      <article style={ticketStyle} aria-label="下一站幸運車站 籤紙">
+      <article style={ticketStyle} aria-label="坐火行 籤紙">
         <header style={headerStyle}>
-          <span style={captionStyle}>都市籤詩 · 下一站幸運車站</span>
+          <span style={captionStyle}>坐火行 · 坐到哪算哪</span>
           <span style={captionStyle}>No.{ticketNo}</span>
         </header>
 
-        <p style={eyebrowStyle}>今日的籤是</p>
+        <p style={eyebrowStyle}>此站有緣</p>
         <h1 style={nameZhStyle}>{pick.name_zh}</h1>
         {pick.name_en && <p style={nameEnStyle}>{pick.name_en}</p>}
         {pick.county && <p style={countyStyle}>{pick.county}</p>}
@@ -68,8 +68,8 @@ export default function TicketPage({ params }: { params: { token: string } }) {
         </div>
 
         <footer style={footerStyle}>
-          <span>搖一搖 · 讓城市替你決定今天</span>
-          <span style={{ opacity: 0.5 }}>NEXT STATION · LUCKY STOP</span>
+          <span>命中注站 · 坐到哪算哪</span>
+          <span style={{ opacity: 0.5 }}>ZUOHUO XING · THIS STATION CHOSE YOU</span>
         </footer>
       </article>
 

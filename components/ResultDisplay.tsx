@@ -23,14 +23,14 @@ export default function ResultDisplay({ station, lines, token, commentCount = 0 
   }
 
   const lineOf = (code: string) => lines.find((l) => l.code === code)
-  const wikiLink = `https://zh.wikipedia.org/wiki/${encodeURIComponent(station.nameZh)}站_(台北捷運)`
+  const wikiLink = `https://zh.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(station.nameZh + '站')}`
   const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     station.nameZh,
   )}+捷運站`
 
   return (
     <div style={containerStyle}>
-      <p style={eyebrowStyle}>今日的籤是</p>
+      <p style={eyebrowStyle}>此站有緣</p>
       <h2 className="brand-reveal" style={stationNameStyle}>
         {station.nameZh}
       </h2>

@@ -87,7 +87,7 @@ export default function TraResultDisplay({ station, token, commentCount = 0, cou
 
   return (
     <div style={containerStyle}>
-      <p style={eyebrowStyle}>今日的籤是</p>
+      <p style={eyebrowStyle}>此站有緣</p>
       <h2
         className={isAnimating ? '' : 'brand-reveal'}
         style={stationNameStyle}

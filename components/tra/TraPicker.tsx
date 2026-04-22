@@ -106,8 +106,8 @@ export default function TraPicker({ counties, countyToStations }: Props) {
     <div className="omikuji-card" style={cardStyle}>
       {contextHolder}
       <div style={cardCaptionStyle}>
-        <span>選擇縣市 · 搖．下．一．站</span>
-        <span>都市籤詩 · 下一站幸運車站</span>
+        <span>坐火行 · 命中注站</span>
+        <span>坐到哪算哪</span>
       </div>
 
       <div className="picker-split">

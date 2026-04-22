@@ -19,8 +19,8 @@ const notoSerif = Noto_Serif_TC({
 })
 
 export const metadata: Metadata = {
-  title: '下一站 · 幸運車站 | 搖一搖，讓城市替你決定今天',
-  description: '選路線或縣市，搖一搖，讓下一站幸運車站替你決定今天的目的地。都市籤詩。台北捷運與台鐵隨機籤站。',
+  title: '坐火行 | 一鍵抽站，說走就走',
+  description: '不知道今天去哪？選條路線，讓命運決定你的下一站。台北捷運與台鐵隨機抽站。',
   icons: { icon: '/train.png' },
 }
 
