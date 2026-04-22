@@ -36,7 +36,7 @@ type ApiResponse = {
 
 type Filter = 'all' | 'mrt' | 'tra'
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = 5
 
 function formatDate(ms: number): string {
   const d = new Date(ms)
@@ -87,7 +87,7 @@ export default function ExploreClient() {
   }
 
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 20px 64px' }}>
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 20px 24px' }}>
       <Link href="/" style={{ color: 'var(--ink-muted)', fontSize: 13 }}>
         ← 回首頁
       </Link>

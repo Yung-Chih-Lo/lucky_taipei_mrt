@@ -75,7 +75,7 @@ function renderTable(rows: Ranking[]) {
     <Table
       dataSource={rows.map((r, i) => ({ ...r, key: `${r.transport_type}-${r.station_id}-${i}` }))}
       columns={columns()}
-      pagination={false}
+      pagination={{ pageSize: 10, showSizeChanger: false, size: 'small' }}
       size="middle"
     />
   )
@@ -88,7 +88,7 @@ export default function StatsClient({ all, mrt, tra }: Props) {
   }, [setMode])
 
   return (
-    <div style={{ maxWidth: 880, margin: '0 auto', padding: '32px 20px 64px' }}>
+    <div style={{ maxWidth: 880, margin: '0 auto', padding: '32px 20px 24px' }}>
       <Link href="/" style={{ color: 'var(--ink-muted)', fontSize: 13 }}>
         ← 回首頁
       </Link>
