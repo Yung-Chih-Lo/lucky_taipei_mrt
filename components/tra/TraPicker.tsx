@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Modal, message } from 'antd'
 import TaiwanSvgMap from './TaiwanSvgMap'
 import TraSidebar from './Sidebar'
@@ -15,6 +15,16 @@ const MODAL_TITLES = [
   '今天的籤',
   '台鐵替你選的是',
 ]
+
+const CYCLE_INTERVAL_MS = 80
+const MIN_CYCLE_MS = 1500
+
+function pickRandomStation(countyPool: string[], countyToStations: Record<string, string[]>): string {
+  if (countyPool.length === 0) return '…'
+  const c = countyPool[Math.floor(Math.random() * countyPool.length)]
+  const list = countyToStations[c] ?? []
+  return list.length > 0 ? list[Math.floor(Math.random() * list.length)] : c
+}
 
 type CountyMap = Record<string, string[]>
 
@@ -42,8 +52,53 @@ export default function TraPicker({ counties, countyToStations }: Props) {
   const [modalOpen, setModalOpen] = useState(false)
   const [titleIndex, setTitleIndex] = useState(0)
   const [messageApi, contextHolder] = message.useMessage()
+  const [cyclingName, setCyclingName] = useState('…')
+  const [showResult, setShowResult] = useState(false)
+  const cycleRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const cycleStartRef = useRef<number | null>(null)
 
   const sortedCounties = useMemo(() => [...counties], [counties])
+
+  // Start cycling when modal opens, reset showResult
+  useEffect(() => {
+    if (!modalOpen) {
+      setShowResult(false)
+      cycleStartRef.current = null
+      if (cycleRef.current) {
+        clearInterval(cycleRef.current)
+        cycleRef.current = null
+      }
+      return
+    }
+    cycleStartRef.current = Date.now()
+    setShowResult(false)
+    setCyclingName(pickRandomStation(selectedCounties, countyToStations))
+    cycleRef.current = setInterval(() => {
+      setCyclingName(pickRandomStation(selectedCounties, countyToStations))
+    }, CYCLE_INTERVAL_MS)
+    return () => {
+      if (cycleRef.current) {
+        clearInterval(cycleRef.current)
+        cycleRef.current = null
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalOpen])
+
+  // When result arrives, wait for minimum cycling time before revealing
+  useEffect(() => {
+    if (!result || !cycleStartRef.current) return
+    const elapsed = Date.now() - cycleStartRef.current
+    const remaining = Math.max(0, MIN_CYCLE_MS - elapsed)
+    const t = setTimeout(() => {
+      if (cycleRef.current) {
+        clearInterval(cycleRef.current)
+        cycleRef.current = null
+      }
+      setShowResult(true)
+    }, remaining)
+    return () => clearTimeout(t)
+  }, [result])
 
   const handleToggleCounty = (county: string) => {
     setSelectedCounties((prev) =>
@@ -152,7 +207,7 @@ export default function TraPicker({ counties, countyToStations }: Props) {
         }}
       >
         {modalOpen && (
-          result ? (
+          showResult && result ? (
             <RevealRitual
               stationName={result.station.nameZh}
               stationNameEn={result.station.nameEn}
@@ -165,15 +220,11 @@ export default function TraPicker({ counties, countyToStations }: Props) {
                 station={result.station}
                 token={result.token}
                 commentCount={result.comment_count ?? 0}
-                countyPool={selectedCounties}
-                countyToStations={countyToStations}
               />
             </RevealRitual>
           ) : (
             <div style={ritualPendingStyle} aria-live="polite">
-              <p style={{ margin: 0, color: 'var(--ink-muted)', letterSpacing: '0.24em' }}>
-                搖 籤 筒…
-              </p>
+              <p style={cyclingNameStyle}>{cyclingName}</p>
             </div>
           )
         )}
@@ -234,8 +285,21 @@ const mapContainerStyle: React.CSSProperties = {
 const ritualPendingStyle: React.CSSProperties = {
   minHeight: 240,
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  gap: 8,
+}
+
+const cyclingNameStyle: React.CSSProperties = {
+  margin: 0,
+  fontFamily: 'var(--font-serif), "Noto Serif TC", ui-serif, serif',
+  fontWeight: 900,
+  fontSize: 'clamp(42px, 9vw, 72px)',
+  lineHeight: 1.05,
+  letterSpacing: '0.08em',
+  color: 'var(--ink)',
+  textAlign: 'center',
 }
 
 const modalTitleStyle: React.CSSProperties = {

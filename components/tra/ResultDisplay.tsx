@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import { Button } from 'antd'
 import {
   EnvironmentOutlined,
@@ -9,9 +8,6 @@ import {
 } from '@ant-design/icons'
 import Link from 'next/link'
 import ShareableTicket from '@/components/omikuji/ShareableTicket'
-
-const CYCLE_INTERVAL_MS = 80
-const CYCLE_DURATION_MS = 2000
 
 type ResultStation = {
   id: number
@@ -24,59 +20,9 @@ type Props = {
   station: ResultStation
   token: string
   commentCount?: number
-  countyPool: string[]
-  countyToStations: Record<string, string[]>
 }
 
-function pickRandomName(countyPool: string[], countyToStations: Record<string, string[]>): string {
-  if (countyPool.length === 0) return '...'
-  const c = countyPool[Math.floor(Math.random() * countyPool.length)]
-  const list = countyToStations[c] ?? []
-  if (list.length === 0) return c
-  return list[Math.floor(Math.random() * list.length)]
-}
-
-export default function TraResultDisplay({ station, token, commentCount = 0, countyPool, countyToStations }: Props) {
-  const [displayName, setDisplayName] = useState(station.nameZh)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    if (prefersReduced) {
-      setDisplayName(station.nameZh)
-      setIsAnimating(false)
-      return
-    }
-
-    setIsAnimating(true)
-    setDisplayName(pickRandomName(countyPool, countyToStations))
-
-    intervalRef.current = setInterval(() => {
-      setDisplayName(pickRandomName(countyPool, countyToStations))
-    }, CYCLE_INTERVAL_MS)
-
-    timeoutRef.current = setTimeout(() => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
-      setDisplayName(station.nameZh)
-      setIsAnimating(false)
-    }, CYCLE_DURATION_MS)
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-      intervalRef.current = null
-      timeoutRef.current = null
-    }
-  }, [station.id, station.nameZh, countyPool, countyToStations])
-
+export default function TraResultDisplay({ station, token, commentCount = 0 }: Props) {
   const wikiLink = `https://zh.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(
     station.nameZh + '車站',
   )}`
@@ -88,14 +34,11 @@ export default function TraResultDisplay({ station, token, commentCount = 0, cou
   return (
     <div style={containerStyle}>
       <p style={eyebrowStyle}>此站有緣</p>
-      <h2
-        className={isAnimating ? '' : 'brand-reveal'}
-        style={stationNameStyle}
-      >
-        {displayName}
-        {!isAnimating && <span style={suffixStyle}>車站</span>}
+      <h2 className="brand-reveal" style={stationNameStyle}>
+        {station.nameZh}
+        <span style={suffixStyle}>車站</span>
       </h2>
-      {!isAnimating && station.county && (
+      {station.county && (
         <p style={countyStyle}>{station.county}</p>
       )}
 
@@ -120,16 +63,14 @@ export default function TraResultDisplay({ station, token, commentCount = 0, cou
         <ShareableTicket token={token} stationNameZh={station.nameZh} />
       </div>
 
-      {!isAnimating && (
-        <Link
-          href={commentCount > 0 ? `/explore?station_id=${station.id}` : commentLink}
-          style={deepLinkStyle}
-        >
-          {commentCount > 0
-            ? `已有 ${commentCount} 位旅人抽到這站 · 看他們寫了什麼 →`
-            : '搶先留下這一站的心得 →'}
-        </Link>
-      )}
+      <Link
+        href={commentCount > 0 ? `/explore?station_id=${station.id}` : commentLink}
+        style={deepLinkStyle}
+      >
+        {commentCount > 0
+          ? `已有 ${commentCount} 位旅人抽到這站 · 看他們寫了什麼 →`
+          : '搶先留下這一站的心得 →'}
+      </Link>
     </div>
   )
 }
