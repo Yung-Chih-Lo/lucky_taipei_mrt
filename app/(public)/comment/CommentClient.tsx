@@ -106,16 +106,29 @@ export default function CommentClient() {
   }
 
   const shareUrl = useMemo(() => {
-    if (!token || typeof window === 'undefined') return ''
-    return `${window.location.origin}/comment?token=${encodeURIComponent(token)}`
-  }, [token])
+    if (state.kind !== 'ok' || typeof window === 'undefined') return ''
+    return `${window.location.origin}/explore?station_id=${state.info.station.id}`
+  }, [state])
 
   const handleCopy = async () => {
     if (!shareUrl) return
     try {
-      await navigator.clipboard.writeText(shareUrl)
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl)
+      } else {
+        const textarea = document.createElement('textarea')
+        textarea.value = shareUrl
+        textarea.style.position = 'fixed'
+        textarea.style.opacity = '0'
+        document.body.appendChild(textarea)
+        textarea.focus()
+        textarea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textarea)
+      }
       messageApi.success('已複製連結')
-    } catch {
+    } catch (err) {
+      console.error('copy failed:', err)
       messageApi.error('複製失敗')
     }
   }
