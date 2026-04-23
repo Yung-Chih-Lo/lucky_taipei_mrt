@@ -1,12 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Button } from 'antd'
-import {
-  EnvironmentOutlined,
-  ExportOutlined,
-  MessageOutlined,
-} from '@ant-design/icons'
+import { EnvironmentOutlined, ExportOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import ShareableTicket from '@/components/omikuji/ShareableTicket'
 
@@ -76,13 +71,7 @@ export default function TraResultDisplay({ station, token, commentCount = 0 }: P
         </a>
       </div>
 
-      <Link href={commentLink} style={{ width: '100%', marginTop: 18 }}>
-        <Button type="primary" size="large" block icon={<MessageOutlined />}>
-          留下心得
-        </Button>
-      </Link>
-
-      <div style={{ width: '100%', marginTop: 10 }}>
+      <div style={{ width: '100%', marginTop: 18 }}>
         <ShareableTicket token={token} stationNameZh={station.nameZh} />
       </div>
 
