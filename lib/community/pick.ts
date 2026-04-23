@@ -54,6 +54,33 @@ export function pickMrt(
   }
 }
 
+export function lookupMrtStation(
+  sqlite: Database.Database,
+  stationId: number,
+): PickedStation | null {
+  const row = sqlite
+    .prepare(
+      `SELECT id, name_zh, name_en FROM stations
+       WHERE id = ? AND transport_type = 'mrt'`,
+    )
+    .get(stationId) as { id: number; name_zh: string; name_en: string | null } | undefined
+
+  if (!row) return null
+
+  const linesForStation = sqlite
+    .prepare('SELECT line_code FROM station_lines WHERE station_id = ?')
+    .all(row.id) as { line_code: string }[]
+
+  return {
+    id: row.id,
+    nameZh: row.name_zh,
+    nameEn: row.name_en,
+    county: null,
+    transportType: 'mrt',
+    lineCodes: linesForStation.map((r) => r.line_code),
+  }
+}
+
 export function pickTra(
   sqlite: Database.Database,
   opts: { counties: string[] },

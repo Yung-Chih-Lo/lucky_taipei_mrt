@@ -64,6 +64,7 @@ export default function MrtPicker({ stations, connections, lines, canvas }: Prop
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             transport_type: 'mrt',
+            station_id: finalStation.id,
             filter: { line_codes: selectedLineCodes },
           }),
         })
