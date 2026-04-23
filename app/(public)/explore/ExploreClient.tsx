@@ -14,6 +14,7 @@ import {
 import { ClockCircleOutlined, EnvironmentOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { useThemeMode } from '@/components/ThemeProvider'
+import PickHistory from '@/components/PickHistory'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -87,75 +88,81 @@ export default function ExploreClient() {
   }
 
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto', padding: '32px 20px 24px' }}>
-      <Link href="/" style={{ color: 'var(--ink-muted)', fontSize: 13 }}>
-        ← 回首頁
-      </Link>
-      <Title level={1} style={{ marginTop: 16, color: 'var(--ink)' }}>
-        旅人心得
-      </Title>
-      <Paragraph style={{ color: 'var(--ink-muted)' }}>
-        每個人在每個車站留下的一段話。
-      </Paragraph>
+    <div className="explore-layout">
+      <aside className="explore-sidebar">
+        <PickHistory />
+      </aside>
 
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
-        <Segmented
-          value={filter}
-          onChange={handleFilterChange}
-          options={[
-            { label: '全部', value: 'all' },
-            { label: '捷運', value: 'mrt' },
-            { label: '台鐵', value: 'tra' },
-          ]}
-        />
-        <Input.Search
-          allowClear
-          placeholder="搜尋留言內容…"
-          style={{ flex: 1, minWidth: 200 }}
-          onSearch={(v) => {
-            setSearch(v)
-            setPage(1)
-          }}
-        />
-      </div>
+      <main className="explore-main">
+        <Link href="/" style={{ color: 'var(--ink-muted)', fontSize: 13 }}>
+          ← 回首頁
+        </Link>
+        <Title level={1} style={{ marginTop: 16, color: 'var(--ink)' }}>
+          旅人心得
+        </Title>
+        <Paragraph style={{ color: 'var(--ink-muted)' }}>
+          每個人在每個車站留下的一段話。
+        </Paragraph>
 
-      <Spin spinning={loading}>
-        {data && data.comments.length === 0 ? (
-          <Empty description="沒有符合條件的心得" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {data?.comments.map((c) => (
-              <article key={c.id} className="omikuji-card" style={cardStyle}>
-                <header style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-                  <Tag color={c.transport_type === 'mrt' ? 'purple' : 'orange'} icon={<EnvironmentOutlined />}>
-                    {c.name_zh} 車站
-                  </Tag>
-                  {c.county && <Tag>{c.county}</Tag>}
-                  <Tag color="default">{c.transport_type === 'mrt' ? '捷運' : '台鐵'}</Tag>
-                  <Text type="secondary" style={{ fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                    <ClockCircleOutlined /> {formatDate(c.created_at)}
-                  </Text>
-                </header>
-                <Paragraph style={{ margin: 0, color: 'var(--ink)', whiteSpace: 'pre-wrap' }}>
-                  {c.content}
-                </Paragraph>
-              </article>
-            ))}
-          </div>
-        )}
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
+          <Segmented
+            value={filter}
+            onChange={handleFilterChange}
+            options={[
+              { label: '全部', value: 'all' },
+              { label: '捷運', value: 'mrt' },
+              { label: '台鐵', value: 'tra' },
+            ]}
+          />
+          <Input.Search
+            allowClear
+            placeholder="搜尋留言內容…"
+            style={{ flex: 1, minWidth: 200 }}
+            onSearch={(v) => {
+              setSearch(v)
+              setPage(1)
+            }}
+          />
+        </div>
 
-        {data && data.total_pages > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
-            <Pagination
-              current={data.page}
-              pageSize={PAGE_SIZE}
-              total={data.total}
-              showSizeChanger={false}
-              onChange={(p) => setPage(p)}
-            />
-          </div>
-        )}
-      </Spin>
+        <Spin spinning={loading}>
+          {data && data.comments.length === 0 ? (
+            <Empty description="沒有符合條件的心得" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {data?.comments.map((c) => (
+                <article key={c.id} className="omikuji-card" style={cardStyle}>
+                  <header style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                    <Tag color={c.transport_type === 'mrt' ? 'purple' : 'orange'} icon={<EnvironmentOutlined />}>
+                      {c.name_zh} 車站
+                    </Tag>
+                    {c.county && <Tag>{c.county}</Tag>}
+                    <Tag color="default">{c.transport_type === 'mrt' ? '捷運' : '台鐵'}</Tag>
+                    <Text type="secondary" style={{ fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      <ClockCircleOutlined /> {formatDate(c.created_at)}
+                    </Text>
+                  </header>
+                  <Paragraph style={{ margin: 0, color: 'var(--ink)', whiteSpace: 'pre-wrap' }}>
+                    {c.content}
+                  </Paragraph>
+                </article>
+              ))}
+            </div>
+          )}
+
+          {data && data.total_pages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+              <Pagination
+                current={data.page}
+                pageSize={PAGE_SIZE}
+                total={data.total}
+                showSizeChanger={false}
+                onChange={(p) => setPage(p)}
+              />
+            </div>
+          )}
+        </Spin>
+      </main>
     </div>
   )
 }

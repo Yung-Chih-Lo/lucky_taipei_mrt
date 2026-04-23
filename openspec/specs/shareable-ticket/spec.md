@@ -52,10 +52,10 @@ The ticket SHALL NOT contain any emoji characters.
 - **THEN** the seal mark SHALL contain the text `台鐵`
 - **AND** the seal fill color SHALL resolve to the `--seal` value
 
-#### Scenario: QR code is present and resolvable
+#### Scenario: QR code resolves to the comment page for this pick
 - **WHEN** the QR code in the generated PNG is scanned
-- **THEN** it SHALL decode to an absolute HTTPS URL on the app's public origin
-- **AND** that URL SHALL resolve to a valid public page (station detail or pick detail)
+- **THEN** it SHALL decode to an absolute HTTPS URL of the form `{origin}/comment?token={token}`
+- **AND** that URL SHALL load the comment submission page for this pick
 
 ### Requirement: Result modal exposes a share action
 The picker's result modal SHALL include a "分享這張籤" (share) action alongside the existing "留下心得" CTA. The action SHALL either open the generated ticket PNG in a new tab for manual save or trigger a download, depending on the platform's Web Share API support. When the Web Share API is available, the app SHALL prefer native share with the PNG payload.

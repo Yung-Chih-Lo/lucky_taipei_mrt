@@ -20,7 +20,7 @@ export default function ResultDisplay({ station, lines, token, commentCount = 0 
   useEffect(() => {
     if (!station) return
     setRelayExcerpt(null)
-    fetch(`/api/stations/${station.id}/latest-comment`)
+    fetch(`/api/stations/${station.id}/relay`)
       .then((res) => {
         if (res.status === 200) return res.json()
         return null

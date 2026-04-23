@@ -158,8 +158,8 @@ html, body {
 }
 
 .tra-map-svg {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
   max-height: 640px;
   max-width: 440px;
   display: block;
@@ -341,5 +341,40 @@ html, body {
   }
   .omikuji-ritual-stage {
     display: none;
+  }
+}
+
+/* Explore page two-column layout */
+.explore-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px 24px;
+}
+
+.explore-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 24px;
+}
+
+.explore-main {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .explore-layout {
+    flex-direction: column;
+    gap: 8px;
+    padding: 24px 16px;
+  }
+
+  .explore-sidebar {
+    width: 100%;
+    position: static;
   }
 }

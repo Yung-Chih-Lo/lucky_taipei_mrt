@@ -30,7 +30,7 @@ export default function HomeClient({ mrt, tra }: Props) {
   if (!hydrated) return null
 
   return (
-    <div style={{ padding: '16px 0 0' }}>
+    <div style={{ height: 'calc(100vh - 64px)', overflow: 'hidden', padding: '16px 0 16px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>
       {mode === 'mrt' ? (
         <MrtPicker
           stations={mrt.stations}

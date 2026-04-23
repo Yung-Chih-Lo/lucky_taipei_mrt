@@ -59,7 +59,7 @@ export async function GET(
 
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || new URL(req.url).origin
-  const qrTarget = `${baseUrl}/ticket/${encodeURIComponent(pick.token)}`
+  const qrTarget = `${baseUrl}/comment?token=${encodeURIComponent(pick.token)}`
   const qrSvg = await QRCode.toString(qrTarget, {
     type: 'svg',
     margin: 1,

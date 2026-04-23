@@ -8,6 +8,7 @@ import TraResultDisplay from './ResultDisplay'
 import RevealRitual from '@/components/omikuji/RevealRitual'
 import { ticketNoFromToken, formatPickDate } from '@/lib/ticketNumber'
 import { paperTokens } from '@/lib/theme'
+import { savePickToHistory } from '@/lib/pickHistory'
 
 const MODAL_TITLES = [
   '下一站開往…',
@@ -144,6 +145,7 @@ export default function TraPicker({ counties, countyToStations }: Props) {
 
         const data = (await res.json()) as PickResult
         setResult(data)
+        savePickToHistory(data.token, data.station.nameZh)
       } catch {
         messageApi.error('網路錯誤，請稍後再試')
         setModalOpen(false)
@@ -239,8 +241,9 @@ const cardStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: 16,
-  height: 'calc(93vh - 64px - 16px)',
-  minHeight: 520,
+  flex: 1,
+  minHeight: 0,
+  overflow: 'hidden',
 }
 
 const cardCaptionStyle: React.CSSProperties = {
@@ -266,6 +269,8 @@ const mainPaneStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   minWidth: 0,
+  minHeight: 0,
+  height: '100%',
 }
 
 const mapContainerStyle: React.CSSProperties = {

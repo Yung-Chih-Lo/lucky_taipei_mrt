@@ -9,6 +9,7 @@ import { filterByLines, pickRandomStation } from '@/lib/randomStation'
 import { paperTokens } from '@/lib/theme'
 import RevealRitual from '@/components/omikuji/RevealRitual'
 import { ticketNoFromToken, formatPickDate } from '@/lib/ticketNumber'
+import { savePickToHistory } from '@/lib/pickHistory'
 import type { CanvasView, ConnectionView, LineView, StationView } from '../types'
 
 const MODAL_TITLES = [
@@ -68,7 +69,10 @@ export default function MrtPicker({ stations, connections, lines, canvas }: Prop
         })
         if (res.ok) {
           const data = (await res.json()) as { token?: string; comment_count?: number }
-          if (data.token) setPickToken(data.token)
+          if (data.token) {
+            setPickToken(data.token)
+            savePickToHistory(data.token, finalStation.nameZh)
+          }
           if (typeof data.comment_count === 'number') setCommentCount(data.comment_count)
         }
       } catch {
@@ -182,8 +186,9 @@ const cardStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: 16,
-  height: 'calc(93vh - 64px - 16px)',
-  minHeight: 520,
+  flex: 1,
+  minHeight: 0,
+  overflow: 'hidden',
 }
 
 const cardCaptionStyle: React.CSSProperties = {
@@ -209,6 +214,8 @@ const mainPaneStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   minWidth: 0,
+  minHeight: 0,
+  height: '100%',
 }
 
 const mapContainerStyle: React.CSSProperties = {

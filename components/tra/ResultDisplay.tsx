@@ -28,7 +28,7 @@ export default function TraResultDisplay({ station, token, commentCount = 0 }: P
 
   useEffect(() => {
     setRelayExcerpt(null)
-    fetch(`/api/stations/${station.id}/latest-comment`)
+    fetch(`/api/stations/${station.id}/relay`)
       .then((res) => {
         if (res.status === 200) return res.json()
         return null
