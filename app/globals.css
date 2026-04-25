@@ -494,3 +494,15 @@ html, body {
     animation: none;
   }
 }
+
+@media (max-width: 640px) {
+  .scan-cta-card {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+  }
+
+  .scan-cta-card__eyebrow {
+    justify-content: center !important;
+  }
+}

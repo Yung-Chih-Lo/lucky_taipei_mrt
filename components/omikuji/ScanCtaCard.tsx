@@ -33,12 +33,12 @@ export default function ScanCtaCard({
 }: Props) {
   const copy = COPY[variant]
   return (
-    <div style={cardStyle}>
+    <div className="scan-cta-card" style={cardStyle}>
       <div style={qrColStyle}>
         <ScreenshotSaveBlock token={token} size={140} />
       </div>
       <div style={textColStyle}>
-        <div style={eyebrowRowStyle}>
+        <div className="scan-cta-card__eyebrow" style={eyebrowRowStyle}>
           <span style={eyebrowStyle}>SCAN · 心得</span>
           <span style={captionStyle}>
             No.{ticketNo} · {dateLabel}
@@ -77,9 +77,10 @@ const textColStyle: React.CSSProperties = {
 
 const eyebrowRowStyle: React.CSSProperties = {
   display: 'flex',
+  flexWrap: 'wrap',
   justifyContent: 'space-between',
   alignItems: 'center',
-  gap: 12,
+  gap: '2px 12px',
 }
 
 const eyebrowStyle: React.CSSProperties = {
@@ -97,7 +98,6 @@ const headlineStyle: React.CSSProperties = {
   lineHeight: 1.3,
   letterSpacing: '0.02em',
   color: 'var(--ink)',
-  whiteSpace: 'nowrap',
 }
 
 const descriptionStyle: React.CSSProperties = {
