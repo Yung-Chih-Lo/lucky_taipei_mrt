@@ -221,7 +221,7 @@ const stageEnStyle: React.CSSProperties = {
 }
 
 const dividerStyle: React.CSSProperties = {
-  margin: '20px 0 4px',
+  margin: '10px 0 2px',
   border: 0,
   borderTop: '1px dashed var(--rule)',
 }

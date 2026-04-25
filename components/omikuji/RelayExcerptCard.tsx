@@ -45,8 +45,8 @@ export default function RelayExcerptCard({
 
 const cardStyle: React.CSSProperties = {
   position: 'relative',
-  marginTop: 18,
-  padding: '18px 20px 14px',
+  marginTop: 8,
+  padding: '12px 16px 10px',
   background: 'var(--paper-surface)',
   border: '1px solid var(--rule)',
   borderRadius: 'var(--radius-sm)',
@@ -81,12 +81,16 @@ const eyebrowStyle: React.CSSProperties = {
 }
 
 const excerptStyle: React.CSSProperties = {
-  margin: '10px 0 12px',
+  margin: '6px 0 8px',
   fontFamily: 'var(--font-serif), "Noto Serif TC", ui-serif, serif',
   fontStyle: 'italic',
   fontSize: 14,
-  lineHeight: 1.7,
+  lineHeight: 1.5,
   color: 'var(--ink)',
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
 }
 
 const footerStyle: React.CSSProperties = {

@@ -4,19 +4,15 @@ export default function FirstArrivalCard() {
   return (
     <div style={cardStyle}>
       <p style={eyebrowStyle}>首　旅　人</p>
-      <p style={bodyStyle}>
-        此站尚無人留言，
-        <br />
-        你是第一位抵達的旅人。
-      </p>
+      <p style={bodyStyle}>此站尚無人留言，你是第一位抵達的旅人。</p>
       <p style={subtextStyle}>FIRST TO ARRIVE · 彩蛋 ✦</p>
     </div>
   )
 }
 
 const cardStyle: React.CSSProperties = {
-  marginTop: 18,
-  padding: '18px 20px',
+  marginTop: 8,
+  padding: '8px 14px',
   border: '1.5px dashed var(--rule-strong)',
   borderRadius: 'var(--radius-md)',
   background: 'transparent',
@@ -32,11 +28,11 @@ const eyebrowStyle: React.CSSProperties = {
 }
 
 const bodyStyle: React.CSSProperties = {
-  margin: '10px 0 12px',
+  margin: '4px 0',
   fontFamily: 'var(--font-serif), "Noto Serif TC", ui-serif, serif',
   fontStyle: 'italic',
-  fontSize: 16,
-  lineHeight: 1.6,
+  fontSize: 14,
+  lineHeight: 1.4,
   color: 'var(--ink)',
 }
 

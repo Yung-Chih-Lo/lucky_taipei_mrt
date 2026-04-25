@@ -39,12 +39,12 @@ export default function TraResultDisplay({ station }: Props) {
 
       <div style={linksRowStyle}>
         <a href={wikiLink} target="_blank" rel="noopener noreferrer" style={linkButtonWrapStyle}>
-          <Button size="large" block icon={<ExportOutlined />}>
+          <Button block icon={<ExportOutlined />}>
             維基百科
           </Button>
         </a>
         <a href={mapLink} target="_blank" rel="noopener noreferrer" style={linkButtonWrapStyle}>
-          <Button size="large" block icon={<EnvironmentOutlined />}>
+          <Button block icon={<EnvironmentOutlined />}>
             Google Maps
           </Button>
         </a>
@@ -55,11 +55,10 @@ export default function TraResultDisplay({ station }: Props) {
 
 const containerStyle: React.CSSProperties = {
   textAlign: 'center',
-  padding: '24px 16px 8px',
+  padding: '8px 16px 4px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  minHeight: 200,
   color: 'var(--ink)',
 }
 
@@ -72,11 +71,11 @@ const eyebrowStyle: React.CSSProperties = {
 }
 
 const stationNameStyle: React.CSSProperties = {
-  margin: '10px 0 4px',
+  margin: '4px 0 2px',
   fontFamily: 'var(--font-serif), "Noto Serif TC", ui-serif, serif',
   fontWeight: 900,
-  fontSize: 56,
-  lineHeight: 1.1,
+  fontSize: 48,
+  lineHeight: 1.05,
   letterSpacing: '0.04em',
   color: 'var(--ink)',
 }
@@ -102,7 +101,7 @@ const chipsRowStyle: React.CSSProperties = {
   flexWrap: 'wrap',
   justifyContent: 'center',
   gap: 6,
-  marginTop: 14,
+  marginTop: 6,
 }
 
 const countyChipStyle: React.CSSProperties = {
@@ -121,8 +120,8 @@ const linksRowStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
   gap: 10,
-  marginTop: 18,
-  paddingTop: 18,
+  marginTop: 10,
+  paddingTop: 10,
   borderTop: '1px solid var(--rule)',
   width: '100%',
 }

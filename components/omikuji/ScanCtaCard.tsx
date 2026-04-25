@@ -55,12 +55,12 @@ export default function ScanCtaCard({
 }
 
 const cardStyle: React.CSSProperties = {
-  marginTop: 18,
-  padding: 18,
+  marginTop: 10,
+  padding: 12,
   background: 'var(--paper-surface-elevated)',
   borderRadius: 'var(--radius-md)',
   display: 'flex',
-  gap: 16,
+  gap: 14,
   alignItems: 'flex-start',
 }
 
@@ -90,25 +90,25 @@ const eyebrowStyle: React.CSSProperties = {
 }
 
 const headlineStyle: React.CSSProperties = {
-  margin: '8px 0 6px',
+  margin: '4px 0 4px',
   fontFamily: 'var(--font-serif), "Noto Serif TC", ui-serif, serif',
   fontWeight: 900,
-  fontSize: 19,
-  lineHeight: 1.4,
+  fontSize: 18,
+  lineHeight: 1.3,
   letterSpacing: '0.02em',
   color: 'var(--ink)',
   whiteSpace: 'nowrap',
 }
 
 const descriptionStyle: React.CSSProperties = {
-  margin: '0 0 12px',
+  margin: '0 0 8px',
   fontSize: 12,
-  lineHeight: 1.6,
+  lineHeight: 1.5,
   color: 'var(--ink-muted)',
 }
 
 const buttonWrapStyle: React.CSSProperties = {
-  marginBottom: 10,
+  marginBottom: 2,
 }
 
 const captionStyle: React.CSSProperties = {
