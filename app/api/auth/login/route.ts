@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { verifyAdminCredentials } from '@/lib/auth'
 import { getSession } from '@/lib/session'
+import { getSqlite } from '@/db/client'
+import { enforceRateLimit, getClientIp } from '@/lib/community/rate-limit'
 
 const BodySchema = z.object({
   username: z.string().min(1),
@@ -19,6 +21,12 @@ export async function POST(req: Request) {
   const parsed = BodySchema.safeParse(body)
   if (!parsed.success) {
     return NextResponse.json({ error: 'invalid body' }, { status: 400 })
+  }
+
+  const ip = getClientIp(req.headers)
+  const limit = enforceRateLimit(getSqlite(), ip, 'auth')
+  if (!limit.ok) {
+    return NextResponse.json({ error: 'too_many_attempts' }, { status: 429 })
   }
 
   const ok = await verifyAdminCredentials(parsed.data.username, parsed.data.password)

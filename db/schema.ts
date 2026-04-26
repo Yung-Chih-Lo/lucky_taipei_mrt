@@ -155,7 +155,7 @@ export const rateLimits = sqliteTable(
   },
   (t) => ({
     pk: primaryKey({ columns: [t.ip, t.windowStart, t.scope] }),
-    scopeCheck: check('rate_limits_scope_check', sql`${t.scope} IN ('pick','comment')`),
+    scopeCheck: check('rate_limits_scope_check', sql`${t.scope} IN ('pick','comment','auth')`),
     windowIdx: index('idx_rate_limits_window').on(t.windowStart),
   }),
 )

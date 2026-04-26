@@ -1,10 +1,13 @@
 import type Database from 'better-sqlite3'
 
-export type RateScope = 'pick' | 'comment'
+export type RateScope = 'pick' | 'comment' | 'auth'
 
-const LIMITS: Record<RateScope, { max: number; granularity: 'minute' | 'hour' }> = {
+type Granularity = 'minute' | 'hour' | '15min'
+
+const LIMITS: Record<RateScope, { max: number; granularity: Granularity }> = {
   pick: { max: 5, granularity: 'minute' },
   comment: { max: 10, granularity: 'hour' },
+  auth: { max: 5, granularity: '15min' },
 }
 
 export function getClientIp(headers: Headers): string {
@@ -23,13 +26,19 @@ export function getClientIp(headers: Headers): string {
   return 'unknown'
 }
 
-function windowKey(now: Date, granularity: 'minute' | 'hour'): string {
+function windowKey(now: Date, granularity: Granularity): string {
   const iso = now.toISOString()
-  return granularity === 'minute' ? iso.slice(0, 16) : iso.slice(0, 13)
+  if (granularity === 'minute') return iso.slice(0, 16)
+  if (granularity === 'hour') return iso.slice(0, 13)
+  const bucket = Math.floor(now.getUTCMinutes() / 15) * 15
+  return `${iso.slice(0, 13)}:${String(bucket).padStart(2, '0')}`
 }
 
-function pruneCutoff(now: Date, granularity: 'minute' | 'hour'): string {
-  const ms = granularity === 'minute' ? 2 * 60 * 1000 : 2 * 60 * 60 * 1000
+function pruneCutoff(now: Date, granularity: Granularity): string {
+  const ms =
+    granularity === 'minute' ? 2 * 60 * 1000
+    : granularity === '15min' ? 30 * 60 * 1000
+    : 2 * 60 * 60 * 1000
   return windowKey(new Date(now.getTime() - ms), granularity)
 }
 

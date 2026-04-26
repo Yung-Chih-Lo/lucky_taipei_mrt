@@ -8,6 +8,8 @@ const getSession = vi.fn(async () => {
   const session = { isAdmin: false, save: sessionSave }
   return session
 })
+const enforceRateLimit = vi.fn(() => ({ ok: true, remaining: 4 }))
+const getClientIp = vi.fn(() => '1.2.3.4')
 
 vi.mock('@/lib/auth', () => ({
   verifyAdminCredentials: (u: string, p: string) => verifyAdminCredentials(u, p),
@@ -15,6 +17,15 @@ vi.mock('@/lib/auth', () => ({
 
 vi.mock('@/lib/session', () => ({
   getSession: () => getSession(),
+}))
+
+vi.mock('@/db/client', () => ({
+  getSqlite: () => ({}),
+}))
+
+vi.mock('@/lib/community/rate-limit', () => ({
+  enforceRateLimit: (...args: unknown[]) => enforceRateLimit(...args),
+  getClientIp: (h: Headers) => getClientIp(h),
 }))
 
 const ADMIN_USERNAME = 'secret-admin-handle'
@@ -63,6 +74,8 @@ beforeEach(() => {
   verifyAdminCredentials.mockReset()
   sessionSave.mockReset()
   getSession.mockClear()
+  enforceRateLimit.mockReturnValue({ ok: true, remaining: 4 })
+  getClientIp.mockReturnValue('1.2.3.4')
 
   logSpies.push(vi.spyOn(console, 'log').mockImplementation(() => {}))
   logSpies.push(vi.spyOn(console, 'info').mockImplementation(() => {}))
@@ -123,5 +136,21 @@ describe('POST /api/auth/login', () => {
 
     expect(res.status).toBe(400)
     assertNoCredentialLeak('n/a', 'n/a')
+  })
+
+  it('returns 429 when rate limit is exceeded', async () => {
+    enforceRateLimit.mockReturnValue({ ok: false, remaining: 0 })
+    const { POST } = await import('./route')
+
+    const res = await POST(
+      new Request('http://localhost/api/auth/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ username: 'any', password: 'any' }),
+      }),
+    )
+
+    expect(res.status).toBe(429)
+    expect(verifyAdminCredentials).not.toHaveBeenCalled()
   })
 })

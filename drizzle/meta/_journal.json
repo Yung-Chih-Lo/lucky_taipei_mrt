@@ -15,6 +15,13 @@
       "when": 1776843228806,
       "tag": "0001_multi_transport_community",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1777216580119,
+      "tag": "0002_smart_karma",
+      "breakpoints": true
     }
   ]
 }
